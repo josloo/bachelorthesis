@@ -1,0 +1,441 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "root-config",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_CXX_STANDARD": "20",
+        "CMAKE_CUDA_STANDARD": "20",
+        "THRUST_CPP_DIALECT": "20",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "OFF",
+        "CMAKE_CUDA_FLAGS": "-Xcompiler='-Wall -Wextra' --expt-relaxed-constexpr --extended-lambda -lineinfo",
+        "DCCCL_THRUST_DEVICE_SYSTEM": "CPP"
+      }
+    },
+    {
+      "name": "debug-base",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "release-base",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "gcc-base",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_CXX_COMPILER": "g++"
+      }
+    },
+    {
+      "name": "mpi-base",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_CXX_COMPILER": "mpic++"
+      }
+    },
+    {
+      "name": "clang-base",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+      }
+    },
+    {
+      "name": "gcc-debug",
+      "displayName": "GCC Debug Build",
+      "inherits": [
+        "root-config",
+        "debug-base",
+        "gcc-base"
+      ]
+    },
+    {
+      "name": "gcc-release",
+      "displayName": "GCC Release Build",
+      "inherits": [
+        "root-config",
+        "release-base",
+        "gcc-base"
+      ]
+    },
+    {
+      "name": "mpi-debug",
+      "displayName": "MPI Debug Build",
+      "inherits": [
+        "root-config",
+        "debug-base",
+        "mpi-base"
+      ]
+    },
+    {
+      "name": "mpi-release",
+      "displayName": "MPI Release Build",
+      "inherits": [
+        "root-config",
+        "release-base",
+        "mpi-base"
+      ]
+    },
+    {
+      "name": "clang-debug",
+      "displayName": "Clang Debug Build",
+      "inherits": [
+        "root-config",
+        "debug-base",
+        "clang-base"
+      ]
+    },
+    {
+      "name": "clang-release",
+      "displayName": "Clang Release Build",
+      "inherits": [
+        "root-config",
+        "release-base",
+        "clang-base"
+      ]
+    },
+    {
+      "name": "cuda-debug",
+      "displayName": "CUDA Debug Build",
+      "inherits": "gcc-debug",
+      "cacheVariables": {
+        "CMAKE_CUDA_COMPILER": "nvcc",
+        "CMAKE_CUDA_FLAGS": "-Xcompiler='-Wall -Wextra' --expt-relaxed-constexpr --extended-lambda -G",
+        "DCCCL_THRUST_DEVICE_SYSTEM": "CUDA"
+      }
+    },
+    {
+      "name": "cuda-release",
+      "displayName": "CUDA Release Build",
+      "inherits": "gcc-release",
+      "cacheVariables": {
+        "CMAKE_CUDA_COMPILER": "nvcc",
+        "DCCCL_THRUST_DEVICE_SYSTEM": "CUDA"
+      }
+    },
+    {
+      "name": "cuda-mpi-debug",
+      "displayName": "CUDA-MPI Debug Build",
+      "inherits": "mpi-debug",
+      "cacheVariables": {
+        "CMAKE_CUDA_COMPILER": "nvcc",
+        "CMAKE_CUDA_FLAGS": "-Xcompiler='-Wall -Wextra' --expt-relaxed-constexpr --extended-lambda -G -ccbin=mpic++"
+      }
+    },
+    {
+      "name": "cuda-mpi-release",
+      "displayName": "CUDA-MPI Release Build",
+      "inherits": "mpi-release",
+      "cacheVariables": {
+        "CMAKE_CUDA_COMPILER": "nvcc",
+        "CMAKE_CUDA_FLAGS": "-Xcompiler='-Wall -Wextra' --expt-relaxed-constexpr --extended-lambda -lineinfo -ccbin=mpic++"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "root-build",
+      "hidden": true,
+      "jobs": 0
+    },
+    {
+      "name": "gcc-debug",
+      "configurePreset": "gcc-debug",
+      "inherits": "root-build"
+    },
+    {
+      "name": "gcc-release",
+      "configurePreset": "gcc-release",
+      "inherits": "root-build"
+    },
+    {
+      "name": "mpi-debug",
+      "configurePreset": "mpi-debug",
+      "inherits": "root-build"
+    },
+    {
+      "name": "mpi-release",
+      "configurePreset": "mpi-release",
+      "inherits": "root-build"
+    },
+    {
+      "name": "clang-debug",
+      "configurePreset": "clang-debug",
+      "inherits": "root-build"
+    },
+    {
+      "name": "clang-release",
+      "configurePreset": "clang-release",
+      "inherits": "root-build"
+    },
+    {
+      "name": "cuda-debug",
+      "configurePreset": "cuda-debug",
+      "inherits": "root-build"
+    },
+    {
+      "name": "cuda-release",
+      "configurePreset": "cuda-release",
+      "inherits": "root-build"
+    },
+    {
+      "name": "cuda-mpi-debug",
+      "configurePreset": "cuda-mpi-debug",
+      "inherits": "root-build"
+    },
+    {
+      "name": "cuda-mpi-release",
+      "configurePreset": "cuda-mpi-release",
+      "inherits": "root-build"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "root-test",
+      "hidden": true,
+      "output": {
+        "outputJUnitFile": "results.xml",
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
+      }
+    },
+    {
+      "name": "gcc-debug",
+      "inherits": "root-test",
+      "configurePreset": "gcc-debug"
+    },
+    {
+      "name": "gcc-release",
+      "inherits": "root-test",
+      "configurePreset": "gcc-release"
+    },
+    {
+      "name": "mpi-debug",
+      "inherits": "root-test",
+      "configurePreset": "mpi-debug"
+    },
+    {
+      "name": "mpi-release",
+      "inherits": "root-test",
+      "configurePreset": "mpi-release"
+    },
+    {
+      "name": "clang-debug",
+      "inherits": "root-test",
+      "configurePreset": "clang-debug"
+    },
+    {
+      "name": "clang-release",
+      "inherits": "root-test",
+      "configurePreset": "clang-release"
+    },
+    {
+      "name": "cuda-debug",
+      "inherits": "root-test",
+      "configurePreset": "cuda-debug"
+    },
+    {
+      "name": "cuda-release",
+      "inherits": "root-test",
+      "configurePreset": "cuda-release"
+    },
+    {
+      "name": "cuda-mpi-debug",
+      "inherits": "root-test",
+      "configurePreset": "cuda-mpi-debug"
+    },
+    {
+      "name": "cuda-mpi-release",
+      "inherits": "root-test",
+      "configurePreset": "cuda-mpi-release"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "gcc-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "gcc-debug"
+        },
+        {
+          "type": "build",
+          "name": "gcc-debug"
+        },
+        {
+          "type": "test",
+          "name": "gcc-debug"
+        }
+      ]
+    },
+    {
+      "name": "gcc-release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "gcc-release"
+        },
+        {
+          "type": "build",
+          "name": "gcc-release"
+        },
+        {
+          "type": "test",
+          "name": "gcc-release"
+        }
+      ]
+    },
+    {
+      "name": "mpi-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "mpi-debug"
+        },
+        {
+          "type": "build",
+          "name": "mpi-debug"
+        },
+        {
+          "type": "test",
+          "name": "mpi-debug"
+        }
+      ]
+    },
+    {
+      "name": "mpi-release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "mpi-release"
+        },
+        {
+          "type": "build",
+          "name": "mpi-release"
+        },
+        {
+          "type": "test",
+          "name": "mpi-release"
+        }
+      ]
+    },
+    {
+      "name": "clang-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang-debug"
+        },
+        {
+          "type": "build",
+          "name": "clang-debug"
+        },
+        {
+          "type": "test",
+          "name": "clang-debug"
+        }
+      ]
+    },
+    {
+      "name": "clang-release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang-release"
+        },
+        {
+          "type": "build",
+          "name": "clang-release"
+        },
+        {
+          "type": "test",
+          "name": "clang-release"
+        }
+      ]
+    },
+    {
+      "name": "cuda-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "cuda-debug"
+        },
+        {
+          "type": "build",
+          "name": "cuda-debug"
+        },
+        {
+          "type": "test",
+          "name": "cuda-debug"
+        }
+      ]
+    },
+    {
+      "name": "cuda-release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "cuda-release"
+        },
+        {
+          "type": "build",
+          "name": "cuda-release"
+        },
+        {
+          "type": "test",
+          "name": "cuda-release"
+        }
+      ]
+    },
+    {
+      "name": "cuda-mpi-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "cuda-mpi-debug"
+        },
+        {
+          "type": "build",
+          "name": "cuda-mpi-debug"
+        },
+        {
+          "type": "test",
+          "name": "cuda-mpi-debug"
+        }
+      ]
+    },
+    {
+      "name": "cuda-mpi-release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "cuda-mpi-release"
+        },
+        {
+          "type": "build",
+          "name": "cuda-mpi-release"
+        },
+        {
+          "type": "test",
+          "name": "cuda-mpi-release"
+        }
+      ]
+    }
+  ]
+}
